@@ -15,13 +15,13 @@ RUN git clone --depth 1 https://github.com/dehydrated-io/dehydrated.git /srv/deh
 # Copy over dehydrated and & cron files
 COPY ./dehydrated/default/hook.sh /data/hook.sh
 COPY ./dehydrated/config /srv/dehydrated/config
-COPY crontab /etc/crontab
+COPY crontab /etc/crontab.d/dehydrated
 COPY run.sh /
 
-RUN chmod +x /run.sh \
-    && crontab /etc/crontab \
-    && touch /var/log/cron
+RUN chmod 644 /etc/crontab.d/dehydrated
 
-RUN chmod 600 /etc/crontab
+RUN chmod +x /run.sh \
+    && crontab /etc/crontab.d/dehydrated \
+    && touch /var/log/cron
 
 CMD [ "/run.sh" ]
